@@ -24,23 +24,24 @@ import java.util.function.Consumer;
 public class ModelEngineV4 implements IModelEngine {
     private final Consumer<Runnable> runTask;
     private Method getOrderedId;
+
     public ModelEngineV4(Consumer<Runnable> runTask) {
         this.runTask = runTask;
         try {
-            getOrderedId = ModelRegistry.class.getDeclaredMethod("getOrderedId");
+            this.getOrderedId = ModelRegistry.class.getDeclaredMethod("getOrderedId");
         } catch (Throwable ignored) {
         }
     }
 
     @Override
     public void applyModel(NPC npc) {
-        String modelId = npc.data().get(MODEL_ID_KEY, null);
+        String modelId = npc.data().get(IModelEngine.MODEL_ID_KEY, null);
         if (modelId == null) return;
         ActiveModel model = ModelEngineAPI.createActiveModel(modelId);
 
         Entity entity = npc.getEntity();
         ModeledEntity old = ModelEngineAPI.getModeledEntity(entity);
-        if (old != null) destroy(old);
+        if (old != null) this.destroy(old);
         ModeledEntity modeled = ModelEngineAPI.getOrCreateModeledEntity(entity);
         modeled.setBaseEntityVisible(false);
         modeled.addModel(model, false);
@@ -55,8 +56,8 @@ public class ModelEngineV4 implements IModelEngine {
         ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity);
         if (modeled != null) {
             Location loc = entity.getLocation();
-            destroy(modeled);
-            if (!deSpawn) runTask.accept(() -> {
+            this.destroy(modeled);
+            if (!deSpawn) this.runTask.accept(() -> {
                 npc.despawn();
                 npc.spawn(loc);
             });
@@ -80,7 +81,7 @@ public class ModelEngineV4 implements IModelEngine {
                 ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity);
                 if (modeled != null) {
                     Location loc = entity.getLocation();
-                    destroy(modeled);
+                    this.destroy(modeled);
                     npc.despawn();
                     npc.spawn(loc);
                 }
@@ -110,7 +111,7 @@ public class ModelEngineV4 implements IModelEngine {
             return Lists.newArrayList(ModelEngineAPI.getAPI().getModelRegistry().getOrderedId());
         } catch (Throwable t) {
             try {
-                Object object = getOrderedId.invoke(ModelEngineAPI.getAPI().getModelRegistry());
+                Object object = this.getOrderedId.invoke(ModelEngineAPI.getAPI().getModelRegistry());
                 if (object instanceof Collection<?>) {
                     List<String> list = new ArrayList<>();
                     for (Object o : ((Collection<?>) object)) {
