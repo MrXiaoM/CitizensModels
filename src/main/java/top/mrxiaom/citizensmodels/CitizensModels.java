@@ -7,18 +7,38 @@ import top.mrxiaom.citizensmodels.meg.v3.ModelEngineV3;
 import top.mrxiaom.citizensmodels.meg.v4.ModelEngineV4;
 import top.mrxiaom.pluginbase.BukkitPlugin;
 import top.mrxiaom.pluginbase.func.LanguageManager;
+import top.mrxiaom.pluginbase.resolver.DefaultLibraryResolver;
+import top.mrxiaom.pluginbase.utils.ClassLoaderWrapper;
+
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 
 public class CitizensModels extends BukkitPlugin {
     public static CitizensModels getInstance() {
         return (CitizensModels) BukkitPlugin.getInstance();
     }
 
-    public CitizensModels() {
+    public CitizensModels() throws Exception {
         super(options()
                 .adventure(true)
                 .scanIgnore("top.mrxiaom.citizensmodels.libs")
                 .disableDefaultConfig(true)
         );
+
+        info("正在检查依赖库状态");
+        File librariesDir = ClassLoaderWrapper.isSupportLibraryLoader
+                ? new File("libraries")
+                : new File(this.getDataFolder(), "libraries");
+        DefaultLibraryResolver resolver = new DefaultLibraryResolver(getLogger(), librariesDir);
+
+        resolver.addResolvedLibrary(BuildConstants.RESOLVED_LIBRARIES);
+
+        List<URL> libraries = resolver.doResolve();
+        info("正在添加 " + libraries.size() + " 个依赖库到类加载器");
+        for (URL library : libraries) {
+            this.classLoader.addURL(library);
+        }
     }
     private IModelEngine modelEngine;
     public IModelEngine getModelEngine() {
