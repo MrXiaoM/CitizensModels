@@ -1,6 +1,7 @@
 package top.mrxiaom.citizensmodels;
         
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import top.mrxiaom.citizensmodels.api.IModelEngine;
 import top.mrxiaom.citizensmodels.meg.v3.ModelEngineV3;
@@ -9,6 +10,7 @@ import top.mrxiaom.pluginbase.BukkitPlugin;
 import top.mrxiaom.pluginbase.func.LanguageManager;
 import top.mrxiaom.pluginbase.resolver.DefaultLibraryResolver;
 import top.mrxiaom.pluginbase.utils.ClassLoaderWrapper;
+import top.mrxiaom.pluginbase.utils.ConfigUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -32,6 +34,11 @@ public class CitizensModels extends BukkitPlugin {
                 : new File(this.getDataFolder(), "libraries");
         DefaultLibraryResolver resolver = new DefaultLibraryResolver(getLogger(), librariesDir);
 
+        File overrideFile = resolve("./.override-libraries.yml");
+        YamlConfiguration overrideLibraries = ConfigUtils.load(overrideFile);
+        for (String key : overrideLibraries.getKeys(false)) {
+            resolver.getStartsReplacer().put(key, overrideLibraries.getString(key));
+        }
         resolver.addResolvedLibrary(BuildConstants.RESOLVED_LIBRARIES);
 
         List<URL> libraries = resolver.doResolve();

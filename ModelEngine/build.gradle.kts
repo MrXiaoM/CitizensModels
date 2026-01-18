@@ -12,7 +12,7 @@ subprojects {
 
     dependencies {
         add("compileOnly", "org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
-        add("compileOnly", "net.citizensnpcs:citizens-main:2.0.39-SNAPSHOT")
+        add("compileOnly", "net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT")
         add("compileOnly", "org.jetbrains:annotations:24.0.0")
         if (project.name != "shared") {
             add("compileOnly", project(":ModelEngine:shared"))

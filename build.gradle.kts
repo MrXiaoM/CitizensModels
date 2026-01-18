@@ -7,7 +7,7 @@ plugins {
 
 buildscript {
     repositories.mavenCentral()
-    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.7.1")
+    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.7.3")
 }
 
 group = "top.mrxiaom.citizensmodels"
@@ -34,7 +34,7 @@ dependencies {
     // compileOnly("org.spigotmc:spigot:1.20") // NMS
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("net.citizensnpcs:citizens-main:2.0.39-SNAPSHOT")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:24.0.0")
 
     base.library("net.kyori:adventure-api:4.22.0")
