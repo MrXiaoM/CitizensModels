@@ -8,8 +8,7 @@ depend:
 softdepend:
   - PlaceholderAPI
 authors: [ MrXiaoM ]
-libraries:
-  - "org.jetbrains:annotations:24.0.0"
+# PluginBase Libraries ${libraries_config}
 commands:
   citizensmodels:
     description: 'The main command of CitizensModels'
