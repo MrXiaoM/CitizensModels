@@ -11,7 +11,7 @@ buildscript {
 }
 
 group = "top.mrxiaom.citizensmodels"
-version = "1.0.0"
+version = "1.0.1"
 val base = top.mrxiaom.gradle.LibraryHelper(project)
 val targetJavaVersion = 17
 val pluginBaseModules = base.modules.run { listOf(library, l10n) }
