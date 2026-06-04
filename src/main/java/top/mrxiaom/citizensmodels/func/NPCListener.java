@@ -13,10 +13,11 @@ import static top.mrxiaom.citizensmodels.api.IModelEngine.MODEL_ID_KEY;
 
 @AutoRegister
 public class NPCListener extends AbstractModule implements Listener {
-    private final IModelEngine api;
+    private final ModelApiWrapper api;
     public NPCListener(CitizensModels plugin) {
         super(plugin);
-        api = plugin.getModelEngine();
+        this.api = new ModelApiWrapper();
+        this.api.register(plugin.getModelEngine());
         registerEvents();
         plugin.getScheduler().runTaskLater(this::applyForAllNPCs, 5L);
     }
