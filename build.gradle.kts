@@ -38,6 +38,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.42-SNAPSHOT") {
         exclude(group="net.byteflux")
     }
+    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:3.1.0")
 
     base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()

@@ -44,7 +44,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
                     return Messages.npc__not_selected.tm(sender);
                 }
                 String modelId = args[1];
-                if (!plugin.getModelEngine().getOrderedModelIds().contains(modelId)) {
+                if (!plugin.getModelApi().getOrderedModelIds().contains(modelId)) {
                     return Messages.npc__blueprint_not_found.tm(sender);
                 }
                 NPCListener.inst().setNPCModel(npc, modelId);
@@ -73,7 +73,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
                 }
                 String modelId = npc.data().get(MODEL_ID_KEY);
                 Entity entity = npc.getEntity();
-                IActiveModel model = plugin.getModelEngine().getActiveModel(entity, modelId);
+                IActiveModel model = plugin.getModelApi().getActiveModel(entity, modelId);
                 if (model == null) {
                     return Messages.npc__model_not_found.tm(sender,
                             Pair.of("%npc_name%", npc.getFullName()),
@@ -123,7 +123,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
                 if ("set".equalsIgnoreCase(args[0])) {
                     NPCSelector selector = ((Citizens) CitizensAPI.getPlugin()).getNPCSelector();
                     if (selector.getSelected(sender) != null) {
-                        return startsWith(plugin.getModelEngine().getOrderedModelIds(), args[1]);
+                        return startsWith(plugin.getModelApi().getOrderedModelIds(), args[1]);
                     } else {
                         return emptyList;
                     }
@@ -137,7 +137,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
                     NPC npc = npcId == null ? null : CitizensAPI.getNPCRegistry().getById(npcId);
                     String modelId = npc == null ? null : npc.data().get(MODEL_ID_KEY);
                     Entity entity = npc == null ? null : npc.getEntity();
-                    IActiveModel model = plugin.getModelEngine().getActiveModel(entity, modelId);
+                    IActiveModel model = plugin.getModelApi().getActiveModel(entity, modelId);
                     if (model != null) {
                         return startsWith(model.getAnimationKeys(), args[2]);
                     }

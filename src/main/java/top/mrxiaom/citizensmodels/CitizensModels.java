@@ -7,9 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.citizensmodels.api.IModelEngine;
+import top.mrxiaom.citizensmodels.impl.bm.BetterModelV3;
 import top.mrxiaom.citizensmodels.impl.meg.v3.ModelEngineV3;
 import top.mrxiaom.citizensmodels.impl.meg.v4.ModelEngineV4;
+import top.mrxiaom.citizensmodels.wrapper.ModelApiWrapper;
 import top.mrxiaom.pluginbase.BukkitPlugin;
 import top.mrxiaom.pluginbase.func.LanguageManager;
 import top.mrxiaom.pluginbase.resolver.DefaultLibraryResolver;
@@ -56,43 +60,85 @@ public class CitizensModels extends BukkitPlugin {
             }
         }
     }
+    private final ModelApiWrapper modelApi = new ModelApiWrapper();
     private IModelEngine modelEngine;
+    private IModelEngine betterModel;
+
+    @NotNull
+    public IModelEngine getModelApi() {
+        return modelApi;
+    }
+
+    @Nullable
     public IModelEngine getModelEngine() {
         return modelEngine;
     }
 
+    @Nullable
+    public IModelEngine getBetterModel() {
+        return betterModel;
+    }
+
     @Override
-    @SuppressWarnings({"deprecation"})
-    public void onEnable() {
-        if (initModelEngine()) {
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+    @SuppressWarnings({"RedundantIfStatement"})
+    protected boolean beforeEnableEarly() {
+        boolean canEnable = false;
+
+        if (initModelEngine()) canEnable = true;
+        if (initBetterModel()) canEnable = true;
+
+        if (canEnable) {
+            modelApi.register(modelEngine);
+            modelApi.register(betterModel);
+            return true;
         }
-        super.onEnable();
+        return false;
     }
 
     private boolean initModelEngine() {
         String megVersion = getModelEngineVersion();
+        if (megVersion == null) {
+            return false;
+        }
         if (megVersion.startsWith("4.")) {
             modelEngine = new ModelEngineV4(getScheduler()::runTask);
-            return false;
+            return true;
         }
         if (megVersion.startsWith("3.")) {
             modelEngine = new ModelEngineV3(getScheduler()::runTask);
-            return false;
+            return true;
         }
         warn("当前 ModelEngine 版本 (" + megVersion + ") 不受支持!");
-        return true;
+        return false;
     }
 
     private String getModelEngineVersion() {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("ModelEngine");
-        if (plugin == null) return "unknown";
+        if (plugin == null) return null;
         String ver = plugin.getDescription().getVersion();
         if (ver.startsWith("R")) {
             return ver.substring(1);
         }
         return ver;
+    }
+
+    private boolean initBetterModel() {
+        String bmVersion = getBetterModelVersion();
+        if (bmVersion == null) {
+            return false;
+        }
+        if (bmVersion.startsWith("3.")) {
+            betterModel = new BetterModelV3(getScheduler()::runTask);
+            return true;
+        }
+        warn("当前 BetterModel 版本 (" + bmVersion + ") 不受支持!");
+        return false;
+    }
+
+    private String getBetterModelVersion() {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("BetterModel");
+        if (plugin == null) return null;
+        return plugin.getDescription().getVersion();
     }
 
     @Override
@@ -109,18 +155,15 @@ public class CitizensModels extends BukkitPlugin {
 
     @Override
     protected void afterDisable() {
-        if (modelEngine != null) {
-            for (NPC npc : CitizensAPI.getNPCRegistry().sorted()) {
-                Entity entity = npc.getEntity();
-                if (entity != null) {
-                    Location loc = entity.getLocation();
-                    if (modelEngine.destroy(entity)) {
-                        npc.despawn();
-                        npc.spawn(loc);
-                    }
+        for (NPC npc : CitizensAPI.getNPCRegistry().sorted()) {
+            Entity entity = npc.getEntity();
+            if (entity != null) {
+                Location loc = entity.getLocation();
+                if (modelApi.destroy(entity)) {
+                    npc.despawn();
+                    npc.spawn(loc);
                 }
             }
-            modelEngine = null;
         }
     }
 }

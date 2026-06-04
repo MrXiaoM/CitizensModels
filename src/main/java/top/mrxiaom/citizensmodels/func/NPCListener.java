@@ -6,18 +6,17 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import top.mrxiaom.citizensmodels.CitizensModels;
-import top.mrxiaom.citizensmodels.wrapper.ModelApiWrapper;
+import top.mrxiaom.citizensmodels.api.IModelEngine;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 
 import static top.mrxiaom.citizensmodels.api.IModelEngine.MODEL_ID_KEY;
 
 @AutoRegister
 public class NPCListener extends AbstractModule implements Listener {
-    private final ModelApiWrapper api;
+    private final IModelEngine api;
     public NPCListener(CitizensModels plugin) {
         super(plugin);
-        this.api = new ModelApiWrapper();
-        this.api.register(plugin.getModelEngine());
+        this.api = plugin.getModelApi();
         registerEvents();
         plugin.getScheduler().runTaskLater(this::applyForAllNPCs, 5L);
     }
