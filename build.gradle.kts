@@ -9,7 +9,7 @@ plugins {
 
 buildscript {
     repositories.mavenCentral()
-    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.7.21")
+    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.7.24")
 }
 
 group = "top.mrxiaom.citizensmodels"
@@ -27,7 +27,6 @@ repositories {
     maven("https://repo.helpch.at/releases/")
     maven("https://jitpack.io")
     maven("https://mvn.lumine.io/repository/maven-public/")
-    maven("https://repo.glaremasters.me/repository/public/")
     maven("https://repo.rosewooddev.io/repository/public/")
 }
 
@@ -36,9 +35,11 @@ dependencies {
     compileOnly(base.depend.annotations)
 
     compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.42-SNAPSHOT") {
+        exclude(group="net.byteflux")
+    }
 
-    base.library(LibraryHelper.adventure("4.22.0"))
+    base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()
 
     for (artifact in pluginBaseModules) {
