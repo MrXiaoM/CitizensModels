@@ -1,11 +1,15 @@
 package top.mrxiaom.citizensmodels;
         
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import top.mrxiaom.citizensmodels.api.IModelEngine;
-import top.mrxiaom.citizensmodels.meg.v3.ModelEngineV3;
-import top.mrxiaom.citizensmodels.meg.v4.ModelEngineV4;
+import top.mrxiaom.citizensmodels.impl.meg.v3.ModelEngineV3;
+import top.mrxiaom.citizensmodels.impl.meg.v4.ModelEngineV4;
 import top.mrxiaom.pluginbase.BukkitPlugin;
 import top.mrxiaom.pluginbase.func.LanguageManager;
 import top.mrxiaom.pluginbase.resolver.DefaultLibraryResolver;
@@ -106,7 +110,16 @@ public class CitizensModels extends BukkitPlugin {
     @Override
     protected void afterDisable() {
         if (modelEngine != null) {
-            modelEngine.onDisable();
+            for (NPC npc : CitizensAPI.getNPCRegistry().sorted()) {
+                Entity entity = npc.getEntity();
+                if (entity != null) {
+                    Location loc = entity.getLocation();
+                    if (modelEngine.destroy(entity)) {
+                        npc.despawn();
+                        npc.spawn(loc);
+                    }
+                }
+            }
             modelEngine = null;
         }
     }

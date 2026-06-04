@@ -1,12 +1,12 @@
-package top.mrxiaom.citizensmodels.meg.v4;
+package top.mrxiaom.citizensmodels.impl.meg.v4;
 
 import com.google.common.collect.Lists;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.generator.blueprint.ModelBlueprint;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModelRegistry;
 import com.ticxo.modelengine.api.model.ModelUpdaters;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -34,10 +34,15 @@ public class ModelEngineV4 implements IModelEngine {
     }
 
     @Override
-    public void applyModel(NPC npc) {
-        String modelId = npc.data().get(IModelEngine.MODEL_ID_KEY, null);
-        if (modelId == null) return;
-        ActiveModel model = ModelEngineAPI.createActiveModel(modelId);
+    public boolean applyModel(@NotNull NPC npc, @NotNull String modelId) {
+        if (modelId.startsWith("meg:")) {
+            modelId = modelId.substring(4);
+        }
+        ModelBlueprint blueprint = ModelEngineAPI.getBlueprint(modelId);
+        if (blueprint == null) {
+            return false;
+        }
+        ActiveModel model = ModelEngineAPI.createActiveModel(blueprint);
 
         Entity entity = npc.getEntity();
         ModeledEntity old = ModelEngineAPI.getModeledEntity(entity);
@@ -47,10 +52,11 @@ public class ModelEngineV4 implements IModelEngine {
         modeled.addModel(model, false);
         ModelUpdaters updaters = ModelEngineAPI.getAPI().getModelUpdaters();
         updaters.registerModeledEntity(modeled.getBase(), modeled);
+        return true;
     }
 
     @Override
-    public void resetModel(NPC npc, boolean deSpawn) {
+    public void resetModel(@NotNull NPC npc, boolean deSpawn) {
         Entity entity = npc.getEntity();
         if (entity == null) return;
         ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity);
@@ -64,6 +70,16 @@ public class ModelEngineV4 implements IModelEngine {
         }
     }
 
+    @Override
+    public boolean destroy(@NotNull Entity entity) {
+        ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity.getUniqueId());
+        if (modeled != null) {
+            destroy(modeled);
+            return true;
+        }
+        return false;
+    }
+
     private void destroy(ModeledEntity modeled) {
         modeled.restore();
         modeled.destroy();
@@ -74,23 +90,7 @@ public class ModelEngineV4 implements IModelEngine {
     }
 
     @Override
-    public void onDisable() {
-        for (NPC npc : CitizensAPI.getNPCRegistry().sorted()) {
-            Entity entity = npc.getEntity();
-            if (entity != null) {
-                ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity);
-                if (modeled != null) {
-                    Location loc = entity.getLocation();
-                    this.destroy(modeled);
-                    npc.despawn();
-                    npc.spawn(loc);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void markHurt(NPC npc) {
+    public void markHurt(@NotNull NPC npc) {
         ModeledEntity modeled = ModelEngineAPI.getModeledEntity(npc.getEntity());
         if (modeled != null) {
             modeled.markHurt();
@@ -98,7 +98,7 @@ public class ModelEngineV4 implements IModelEngine {
     }
 
     @Override
-    public void markDeath(NPC npc) {
+    public void markDeath(@NotNull NPC npc) {
         ModeledEntity modeled = ModelEngineAPI.getModeledEntity(npc.getEntity());
         if (modeled != null) {
             modeled.markRemoved();
@@ -127,8 +127,11 @@ public class ModelEngineV4 implements IModelEngine {
 
     @Override
     public @Nullable IActiveModel getActiveModel(@Nullable Entity entity, @Nullable String modelId) {
-        ModeledEntity modeled = entity == null ? null : ModelEngineAPI.getModeledEntity(entity);
-        ActiveModel model = modeled == null || modelId == null ? null : modeled.getModel(modelId).orElse(null);
-        return model == null ? null : new ActiveModelV4(model);
+        if (entity == null || modelId == null) return null;
+        ModeledEntity modeled = ModelEngineAPI.getModeledEntity(entity);
+        if (modeled == null) return null;
+        ActiveModel model = modeled.getModel(modelId).orElse(null);
+        if (model == null) return null;
+        return new ActiveModelV4(model);
     }
 }

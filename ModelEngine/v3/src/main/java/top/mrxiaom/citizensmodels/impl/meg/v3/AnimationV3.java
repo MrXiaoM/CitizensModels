@@ -1,4 +1,4 @@
-package top.mrxiaom.citizensmodels.meg.v3;
+package top.mrxiaom.citizensmodels.impl.meg.v3;
 
 import com.ticxo.modelengine.api.animation.AnimationHandler;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
