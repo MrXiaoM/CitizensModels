@@ -15,7 +15,7 @@ buildscript {
 group = "top.mrxiaom.citizensmodels"
 version = "1.0.1"
 val base = LibraryHelper(project)
-val targetJavaVersion = 17
+val targetJavaVersion = 21
 val pluginBaseModules = base.modules.run { listOf(library, l10n) }
 val shadowGroup = "top.mrxiaom.citizensmodels.libs"
 
