@@ -43,6 +43,7 @@ dependencies {
     base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()
 
+    implementation("com.github.technicallycoded:FoliaLib:0.4.4") { isTransitive = false }
     for (artifact in pluginBaseModules) {
         implementation(artifact)
     }

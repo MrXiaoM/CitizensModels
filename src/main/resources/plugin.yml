@@ -2,6 +2,7 @@ name: CitizensModels
 version: '${version}'
 main: top.mrxiaom.citizensmodels.CitizensModels
 api-version: 1.13
+folia-supported: true
 depend:
   - Citizens
   - ModelEngine
