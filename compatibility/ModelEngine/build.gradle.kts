@@ -18,9 +18,7 @@ subprojects {
             exclude(group="net.byteflux")
         })
         addProvider("compileOnly", rootProject.libs.annotations)
-        if (project.name != "shared") {
-            add("compileOnly", project(":shared"))
-        }
+        add("compileOnly", project(":compatibility:shared"))
     }
     tasks {
         withType<JavaCompile>().configureEach {

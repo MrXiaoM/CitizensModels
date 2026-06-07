@@ -46,11 +46,11 @@ dependencies {
     }
     implementation(base.resolver.lite)
 
-    implementation(project(":shared"))
-    for (subproject in project.project(":ModelEngine").subprojects) {
+    implementation(project(":compatibility:shared"))
+    for (subproject in project.project(":compatibility:ModelEngine").subprojects) {
         implementation(subproject)
     }
-    for (subproject in project.project(":BetterModel").subprojects) {
+    for (subproject in project.project(":compatibility:BetterModel").subprojects) {
         implementation(subproject)
     }
 }

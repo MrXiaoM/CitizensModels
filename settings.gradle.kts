@@ -1,9 +1,10 @@
 rootProject.name = "CitizensModels"
 
-include(":shared")
-include(":ModelEngine")
-include(":ModelEngine:v4")
-include(":ModelEngine:v3")
+include(":compatibility:shared")
 
-include(":BetterModel")
-include(":BetterModel:v3")
+include(":compatibility:ModelEngine")
+include(":compatibility:ModelEngine:v4")
+include(":compatibility:ModelEngine:v3")
+
+include(":compatibility:BetterModel")
+include(":compatibility:BetterModel:v3")
