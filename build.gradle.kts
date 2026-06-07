@@ -72,6 +72,7 @@ tasks {
         configurations.add(project.configurations.runtimeClasspath.get())
         mapOf(
             "top.mrxiaom.pluginbase" to "base",
+            "com.tcoded.folialib" to "folialib",
         ).forEach { (original, target) ->
             relocate(original, "$shadowGroup.$target")
         }
