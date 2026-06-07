@@ -16,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.citizensmodels.api.IActiveModel;
 import top.mrxiaom.citizensmodels.api.IModelEngine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class BetterModelV3 implements IModelEngine {

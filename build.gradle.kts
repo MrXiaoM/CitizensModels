@@ -15,7 +15,7 @@ buildscript {
 group = "top.mrxiaom.citizensmodels"
 version = "1.0.1"
 val base = LibraryHelper(project)
-val targetJavaVersion = 21
+val targetJavaVersion = 17
 val pluginBaseModules = base.modules.run { listOf(library, l10n) }
 val shadowGroup = "top.mrxiaom.citizensmodels.libs"
 
@@ -38,7 +38,6 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.42-SNAPSHOT") {
         exclude(group="net.byteflux")
     }
-    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:3.1.0")
 
     base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()
@@ -49,7 +48,11 @@ dependencies {
     }
     implementation(base.resolver.lite)
 
+    implementation(project(":shared"))
     for (subproject in project.project(":ModelEngine").subprojects) {
+        implementation(subproject)
+    }
+    for (subproject in project.project(":BetterModel").subprojects) {
         implementation(subproject)
     }
 }
