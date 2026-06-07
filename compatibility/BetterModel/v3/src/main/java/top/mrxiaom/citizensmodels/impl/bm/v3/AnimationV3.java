@@ -1,4 +1,4 @@
-package top.mrxiaom.citizensmodels.impl.bm;
+package top.mrxiaom.citizensmodels.impl.bm.v3;
 
 import kr.toxicity.model.api.animation.AnimationModifier;
 import kr.toxicity.model.api.data.blueprint.BlueprintAnimation;

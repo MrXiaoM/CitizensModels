@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.citizensmodels.api.IModelEngine;
-import top.mrxiaom.citizensmodels.impl.bm.BetterModelV3;
+import top.mrxiaom.citizensmodels.impl.bm.v3.BetterModelV3;
 import top.mrxiaom.citizensmodels.impl.meg.v3.ModelEngineV3;
 import top.mrxiaom.citizensmodels.impl.meg.v4.ModelEngineV4;
 import top.mrxiaom.citizensmodels.wrapper.ModelApiWrapper;
