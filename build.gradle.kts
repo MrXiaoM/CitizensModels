@@ -31,13 +31,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
-    compileOnly(base.depend.annotations)
+    compileOnly(libs.spigot.api)
+    compileOnly(libs.annotations)
 
-    compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("net.citizensnpcs:citizens-main:2.0.42-SNAPSHOT") {
-        exclude(group="net.byteflux")
-    }
+    compileOnly(libs.papi)
+    compileOnly(libs.citizens.main) { exclude(group="net.byteflux") }
 
     base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()

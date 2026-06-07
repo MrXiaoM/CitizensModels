@@ -4,7 +4,6 @@ subprojects {
         mavenCentral()
         maven("https://maven.citizensnpcs.co/repo")
         maven("https://mvn.lumine.io/repository/maven-public/")
-        maven("https://repo.glaremasters.me/repository/public/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
     configure<JavaPluginExtension> {
@@ -14,9 +13,11 @@ subprojects {
     val targetJavaVersion = 17
 
     dependencies {
-        add("compileOnly", "org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
-        add("compileOnly", "net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT")
-        add("compileOnly", "org.jetbrains:annotations:24.0.0")
+        addProvider("compileOnly", rootProject.libs.spigot.api)
+        addProvider("compileOnly", rootProject.libs.citizens.main, Action {
+            exclude(group="net.byteflux")
+        })
+        addProvider("compileOnly", rootProject.libs.annotations)
         if (project.name != "shared") {
             add("compileOnly", project(":shared"))
         }
