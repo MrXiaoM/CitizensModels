@@ -12,6 +12,7 @@ import java.util.List;
 @SuppressWarnings("UnusedReturnValue")
 public interface IModelEngine {
     String MODEL_ID_KEY = "model-id";
+    boolean hasModel(@NotNull NPC npc);
     default boolean applyModel(@NotNull NPC npc) {
         String modelId = npc.data().get(IModelEngine.MODEL_ID_KEY, null);
         if (modelId == null) return false;

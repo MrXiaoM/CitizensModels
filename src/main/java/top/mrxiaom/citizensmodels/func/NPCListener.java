@@ -59,6 +59,16 @@ public class NPCListener extends AbstractModule implements Listener {
         api.markDeath(e.getNPC());
     }
 
+    @EventHandler
+    public void onNPCSeen(NPCSeenByPlayerEvent e) {
+        NPC npc = e.getNPC();
+        if (api.hasModel(npc)) {
+            return;
+        }
+        api.applyModel(npc);
+        e.getPlayer().getOpenInventory().getTopInventory().getHolder();
+    }
+
     public void setNPCModel(NPC npc, String modelId) {
         if (modelId == null) {
             npc.data().remove(MODEL_ID_KEY);

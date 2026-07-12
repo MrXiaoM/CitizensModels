@@ -22,6 +22,16 @@ public class ModelApiWrapper implements IModelEngine {
     }
 
     @Override
+    public boolean hasModel(@NotNull NPC npc) {
+        for (IModelEngine api : list) {
+            if (api.hasModel(npc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean applyModel(@NotNull NPC npc, @NotNull String modelId) {
         for (IModelEngine api : list) {
             if (api.applyModel(npc, modelId)) {

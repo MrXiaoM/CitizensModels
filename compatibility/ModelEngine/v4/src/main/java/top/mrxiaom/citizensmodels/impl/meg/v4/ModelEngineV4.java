@@ -34,6 +34,12 @@ public class ModelEngineV4 implements IModelEngine {
     }
 
     @Override
+    public boolean hasModel(@NotNull NPC npc) {
+        Entity entity = npc.getEntity();
+        return ModelEngineAPI.getModeledEntity(entity.getUniqueId()) != null;
+    }
+
+    @Override
     public boolean applyModel(@NotNull NPC npc, @NotNull String modelId) {
         if (modelId.startsWith("meg:")) {
             modelId = modelId.substring(4);

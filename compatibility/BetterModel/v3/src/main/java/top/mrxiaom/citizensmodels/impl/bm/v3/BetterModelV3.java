@@ -34,6 +34,13 @@ public class BetterModelV3 implements IModelEngine {
     }
 
     @Override
+    public boolean hasModel(@NotNull NPC npc) {
+        PlatformEntity entity = BukkitAdapter.adapt(npc.getEntity());
+        EntityTrackerRegistry registry = BetterModel.registry(entity).orElse(null);
+        return registry != null && !registry.isClosed();
+    }
+
+    @Override
     public boolean applyModel(@NotNull NPC npc, @NotNull String modelId) {
         if (modelId.startsWith("bm:")) {
             modelId = modelId.substring(3);
