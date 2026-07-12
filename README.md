@@ -28,6 +28,9 @@ CitizensModels 至少需要 Java 17 才能运行。
 + `R3.2.0`
 + *不会去支持v2及以下*
 
+支持的 BetterModel 版本
++ `3.1.0`
+
 ## 命令
 
 所有命令仅管理员可用。  
@@ -41,6 +44,8 @@ CitizensModels 至少需要 Java 17 才能运行。
 | `/npcm reset` | 重置已选中的NPC的模型 |
 | `/npcm ani <npcId> <动画>` | 为NPC播放模型动画 |
 | `/npcm reload` | 重载插件配置文件（暂无） |
+
+在同时安装 ModelEngine 和 BetterModel 的情况下，蓝图名称可以添加前缀 `meg:` 或 `bm:` 来区分是哪个插件的蓝图。
 
 ## 常见问题
 
