@@ -9,14 +9,14 @@ plugins {
 
 buildscript {
     repositories.mavenCentral()
-    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.7.32")
+    dependencies.classpath("top.mrxiaom:LibrariesResolver-Gradle:1.8.1")
 }
 
 group = "top.mrxiaom.citizensmodels"
 version = "1.0.3"
 val base = LibraryHelper(project)
 val targetJavaVersion = 17
-val pluginBaseModules = base.modules.run { listOf(library, l10n) }
+val pluginBaseModules = base.modules.run { listOf(library, message, l10n, misc) }
 val shadowGroup = "top.mrxiaom.citizensmodels.libs"
 
 repositories {
@@ -40,7 +40,6 @@ dependencies {
     base.library(LibraryHelper.adventure("4.25.0"))
     base.collectPluginHolders()
 
-    implementation("com.github.technicallycoded:FoliaLib:0.4.4") { isTransitive = false }
     for (artifact in pluginBaseModules) {
         implementation(artifact)
     }
@@ -73,7 +72,6 @@ tasks {
         configurations.add(project.configurations.runtimeClasspath.get())
         mapOf(
             "top.mrxiaom.pluginbase" to "base",
-            "com.tcoded.folialib" to "folialib",
         ).forEach { (original, target) ->
             relocate(original, "$shadowGroup.$target")
         }

@@ -19,7 +19,6 @@ import top.mrxiaom.pluginbase.func.LanguageManager;
 import top.mrxiaom.pluginbase.resolver.DefaultLibraryResolver;
 import top.mrxiaom.pluginbase.utils.ClassLoaderWrapper;
 import top.mrxiaom.pluginbase.utils.ConfigUtils;
-import top.mrxiaom.pluginbase.utils.scheduler.FoliaLibScheduler;
 
 import java.io.File;
 import java.net.URL;
@@ -36,7 +35,6 @@ public class CitizensModels extends BukkitPlugin {
                 .scanIgnore("top.mrxiaom.citizensmodels.libs")
                 .disableDefaultConfig(true)
         );
-        this.scheduler = new FoliaLibScheduler(this);
 
         try {
             //noinspection ResultOfMethodCallIgnored
